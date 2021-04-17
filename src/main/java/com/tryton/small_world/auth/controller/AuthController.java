@@ -1,7 +1,7 @@
 package com.tryton.small_world.auth.controller;
 
-import com.tryton.small_world.auth.controller.model.User;
-import com.tryton.small_world.auth.controller.service.UserService;
+import com.tryton.small_world.auth.model.User;
+import com.tryton.small_world.auth.service.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;

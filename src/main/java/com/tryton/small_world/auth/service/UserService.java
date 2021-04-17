@@ -1,6 +1,6 @@
-package com.tryton.small_world.auth.controller.service;
+package com.tryton.small_world.auth.service;
 
-import com.tryton.small_world.auth.controller.model.User;
+import com.tryton.small_world.auth.model.User;
 import org.springframework.stereotype.Service;
 
 @Service
