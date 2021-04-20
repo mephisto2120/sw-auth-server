@@ -1,7 +1,7 @@
 package com.tryton.small_world.auth.converter;
 
 import com.tryton.small_world.auth.model.UserEntity;
-import com.tryton.small_world.auth.controller.model.User;
+import com.tryton.small_world.auth.model.User;
 import org.springframework.stereotype.Component;
 
 @Component
