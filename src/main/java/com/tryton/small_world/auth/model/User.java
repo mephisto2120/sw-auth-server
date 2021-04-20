@@ -1,4 +1,4 @@
-package com.tryton.small_world.auth.controller.model;
+package com.tryton.small_world.auth.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
