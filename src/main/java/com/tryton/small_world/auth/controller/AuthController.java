@@ -5,6 +5,7 @@ import com.tryton.small_world.auth.model.User;
 import com.tryton.small_world.auth.service.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.impl.TextCodec;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -62,12 +63,13 @@ public class AuthController {
 
     private static String getJwts(User user) {
         long now = System.currentTimeMillis();
+        String secretKey = TextCodec.BASE64URL.encode("topSecret12#");
         String jwts = Jwts.builder()
                 .setSubject(user.getEmail())
                 .claim("roles", "user")
                 .setIssuedAt(new Date(now))
                 .setExpiration(new Date(now + 600 * 1000))
-                .signWith(SignatureAlgorithm.HS512, "secretkey")
+                .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
         return jwts;
     }
