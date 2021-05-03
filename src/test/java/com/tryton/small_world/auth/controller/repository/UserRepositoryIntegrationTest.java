@@ -1,6 +1,6 @@
 package com.tryton.small_world.auth.controller.repository;
 
-import com.tryton.small_world.auth.controller.db.UserEntity;
+import com.tryton.small_world.auth.db.UserEntity;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,8 +34,14 @@ public class UserRepositoryIntegrationTest {
 
     @BeforeEach
     public void setUp() {
-        UserEntity user1 = new UserEntity(null, SPASSKY_EMAIL, SPASSKY_PASSWORD);
-        UserEntity user2 = new UserEntity(null, PETROSIAN_EMAIL, PETROSIAN_PASSWORD);
+        UserEntity user1 = UserEntity.builder()
+                .email(SPASSKY_EMAIL)
+                .password(SPASSKY_PASSWORD)
+                .build();
+        UserEntity user2 = UserEntity.builder()
+                .email(PETROSIAN_EMAIL)
+                .password(PETROSIAN_PASSWORD)
+                .build();
         //save user, verify has ID value after save
         assertNull(user1.getId());
         assertNull(user2.getId());//null before save
