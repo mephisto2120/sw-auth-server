@@ -1,16 +1,34 @@
 package com.tryton.small_world.auth.db;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import java.io.Serializable;
-import java.util.Objects;
+import lombok.Builder;
 
+import java.io.Serializable;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.validation.constraints.NotNull;
+
+@Builder
+@Embeddable
 public class UsersRolesEntityPK implements Serializable {
+
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "ur_usr_id")
     private long urUsrId;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "ur_rol_id")
     private long urRolId;
 
-    @Column(name = "ur_usr_id")
-    @Id
+    public UsersRolesEntityPK() {
+    }
+
+    public UsersRolesEntityPK(long urUsrId, long urRolId) {
+        this.urUsrId = urUsrId;
+        this.urRolId = urRolId;
+    }
+
     public long getUrUsrId() {
         return urUsrId;
     }
@@ -19,8 +37,6 @@ public class UsersRolesEntityPK implements Serializable {
         this.urUsrId = urUsrId;
     }
 
-    @Column(name = "ur_rol_id")
-    @Id
     public long getUrRolId() {
         return urRolId;
     }
@@ -30,15 +46,32 @@ public class UsersRolesEntityPK implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UsersRolesEntityPK that = (UsersRolesEntityPK) o;
-        return urUsrId == that.urUsrId && urRolId == that.urRolId;
+    public int hashCode() {
+        int hash = 0;
+        hash += (int) urUsrId;
+        hash += (int) urRolId;
+        return hash;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(urUsrId, urRolId);
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof UsersRolesEntityPK)) {
+            return false;
+        }
+        UsersRolesEntityPK other = (UsersRolesEntityPK) object;
+        if (this.urUsrId != other.urUsrId) {
+            return false;
+        }
+        if (this.urRolId != other.urRolId) {
+            return false;
+        }
+        return true;
     }
+
+    @Override
+    public String toString() {
+        return "com.tryton.small_world.auth.db.UsersRolesEntityPK[ urUsrId=" + urUsrId + ", urRolId=" + urRolId + " ]";
+    }
+    
 }

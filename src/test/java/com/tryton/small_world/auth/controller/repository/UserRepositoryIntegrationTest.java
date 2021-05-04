@@ -1,6 +1,6 @@
 package com.tryton.small_world.auth.controller.repository;
 
-import com.tryton.small_world.auth.db.UserEntity;
+import com.tryton.small_world.auth.db.UsersEntity;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,26 +36,35 @@ public class UserRepositoryIntegrationTest {
 
     @BeforeEach
     public void setUp() {
-        UserEntity user1 = UserEntity.builder()
-                .email(SPASSKY_EMAIL)
-                .password(SPASSKY_PASSWORD)
+        Date now = Date.from(Instant.now());
+        UsersEntity user1 = UsersEntity.builder()
+                .usrEmail(SPASSKY_EMAIL)
+                .usrPassword(SPASSKY_PASSWORD)
+                .usrFirstName("Boris")
+                .usrLastName("Spassky")
+                .usrDateInserted(now.toString())
+                .usrDateModified(now)
                 .build();
-        UserEntity user2 = UserEntity.builder()
-                .email(PETROSIAN_EMAIL)
-                .password(PETROSIAN_PASSWORD)
+        UsersEntity user2 = UsersEntity.builder()
+                .usrEmail(PETROSIAN_EMAIL)
+                .usrPassword(PETROSIAN_PASSWORD)
+                .usrFirstName("Tigran")
+                .usrLastName("Petrosian")
+                .usrDateInserted(now.toString())
+                .usrDateModified(now)
                 .build();
         //save user, verify has ID value after save
-        assertNull(user1.getId());
-        assertNull(user2.getId());//null before save
+        assertNull(user1.getUsrId());
+        assertNull(user2.getUsrId());//null before save
 
-        UserEntity saved1 = userRepository.save(user1);
-        UserEntity saved2 = userRepository.save(user2);
+        UsersEntity saved1 = userRepository.save(user1);
+        UsersEntity saved2 = userRepository.save(user2);
 
-        assertNotNull(user1.getId());
-        assertNotNull(user2.getId());
+        assertNotNull(user1.getUsrId());
+        assertNotNull(user2.getUsrId());
 
-        userIds.add(saved1.getId());
-        userIds.add(saved2.getId());
+        userIds.add(saved1.getUsrId());
+        userIds.add(saved2.getUsrId());
     }
 
     @AfterEach
@@ -62,18 +73,18 @@ public class UserRepositoryIntegrationTest {
     }
 
     @Test
-    public void testFetchData(){
+    public void testFetchData() {
         assertUser(SPASSKY_EMAIL, SPASSKY_PASSWORD);
         assertUser(PETROSIAN_EMAIL, PETROSIAN_PASSWORD);
 
-        Iterable<UserEntity> users = userRepository.findAll();
+        Iterable<UsersEntity> users = userRepository.findAll();
         assertThat(users).hasSize(2);
     }
 
     private void assertUser(String email, String password) {
-        UserEntity user = userRepository.findByEmail(email);
+        UsersEntity user = userRepository.findByUsrEmail(email);
 
         assertNotNull(user);
-        assertThat(user.getPassword()).isEqualTo(password);
+        assertThat(user.getUsrPassword()).isEqualTo(password);
     }
 }
