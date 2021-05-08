@@ -3,8 +3,6 @@ package com.tryton.small_world.auth.db;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 
-import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,6 +17,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor

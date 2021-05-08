@@ -14,6 +14,6 @@ import java.util.List;
 public class User {
     private String email;
     private String password;
-    private List<Status> statuses;
+    private Status status;
     private List<Role> roles;
 }

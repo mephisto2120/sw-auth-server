@@ -21,22 +21,42 @@ SET character_set_server = UTF8;
 USE `auth_test` ;
 
 -- -----------------------------------------------------
+-- Table `auth_test`.`status`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `auth_test`.`status` ;
+
+CREATE TABLE IF NOT EXISTS `auth_test`.`status` (
+    `sts_id` BIGINT(20) NOT NULL,
+    `sts_name` VARCHAR(45) NOT NULL,
+    `sts_desc` VARCHAR(100) NOT NULL,
+    PRIMARY KEY (`sts_id`))
+    ENGINE = InnoDB;
+
+-- -----------------------------------------------------
 -- Table `auth_test`.`users`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `auth_test`.`users` ;
 
 CREATE TABLE IF NOT EXISTS `auth_test`.`users` (
-                                              `usr_id` BIGINT(20) NOT NULL AUTO_INCREMENT,
-                                              `usr_email` VARCHAR(100) NOT NULL,
-                                              `usr_password` VARCHAR(200) NOT NULL,
-                                              `usr_last_name` VARCHAR(200) NOT NULL,
-                                              `usr_first_name` VARCHAR(200) NOT NULL,
-                                              `usr_date_inserted` VARCHAR(45) NOT NULL,
-                                              `usr_date_modified` TIMESTAMP NOT NULL,
-
-                                              PRIMARY KEY (`usr_id`))
+    `usr_id` BIGINT(20) NOT NULL,
+    `usr_email` VARCHAR(100) NOT NULL,
+    `usr_password` VARCHAR(200) NOT NULL,
+    `usr_last_name` VARCHAR(200) NOT NULL,
+    `usr_first_name` VARCHAR(200) NOT NULL,
+    `usr_date_inserted` VARCHAR(45) NULL,
+    `usr_date_modified` TIMESTAMP NULL,
+    `usr_sts_id` BIGINT(20) NULL,
+    PRIMARY KEY (`usr_id`),
+    CONSTRAINT `usr_sts_fk`
+    FOREIGN KEY (`usr_sts_id`)
+    REFERENCES `auth_test`.`status` (`sts_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
     ENGINE = InnoDB;
 
+CREATE INDEX `usr_sts_fk_idx` ON `auth_test`.`users` (`usr_sts_id` ASC) VISIBLE;
+
+CREATE UNIQUE INDEX `usr_email_UNIQUE` ON `auth_test`.`users` (`usr_email` ASC) VISIBLE;
 
 -- -----------------------------------------------------
 -- Table `auth_test`.`role`
@@ -49,28 +69,6 @@ CREATE TABLE IF NOT EXISTS `auth_test`.`role` (
                                              `rol_desc` VARCHAR(200) NOT NULL,
                                              PRIMARY KEY (`rol_id`))
     ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `auth_test`.`status`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `auth_test`.`status` ;
-
-CREATE TABLE IF NOT EXISTS `auth_test`.`status` (
-                                               `sts_id` BIGINT(20) NOT NULL,
-                                               `sts_name` VARCHAR(45) NOT NULL,
-                                               `sts_desc` VARCHAR(100) NOT NULL,
-                                               `users_usr_id` BIGINT(20) NOT NULL,
-                                               PRIMARY KEY (`sts_id`, `users_usr_id`),
-                                               CONSTRAINT `fk_status_users`
-                                                   FOREIGN KEY (`users_usr_id`)
-                                                       REFERENCES `auth_test`.`users` (`usr_id`)
-                                                       ON DELETE NO ACTION
-                                                       ON UPDATE NO ACTION)
-    ENGINE = InnoDB;
-
-CREATE INDEX `fk_status_users_idx` ON `auth_test`.`status` (`users_usr_id` ASC) VISIBLE;
-
 
 -- -----------------------------------------------------
 -- Table `auth_test`.`users_roles`

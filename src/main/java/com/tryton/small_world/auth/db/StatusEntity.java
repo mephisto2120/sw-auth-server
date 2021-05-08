@@ -3,72 +3,68 @@ package com.tryton.small_world.auth.db;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 
-import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.util.List;
+
 
 @Builder
 @AllArgsConstructor
 @Entity
 @Table(name = "status")
 @NamedQueries({
-    @NamedQuery(name = "StatusEntity.findAll", query = "SELECT s FROM StatusEntity s"),
-    @NamedQuery(name = "StatusEntity.findByStsId", query = "SELECT s FROM StatusEntity s WHERE s.statusEntityPK.stsId = :stsId"),
-    @NamedQuery(name = "StatusEntity.findByStsName", query = "SELECT s FROM StatusEntity s WHERE s.stsName = :stsName"),
-    @NamedQuery(name = "StatusEntity.findByStsDesc", query = "SELECT s FROM StatusEntity s WHERE s.stsDesc = :stsDesc"),
-    @NamedQuery(name = "StatusEntity.findByUsersUsrId", query = "SELECT s FROM StatusEntity s WHERE s.statusEntityPK.usersUsrId = :usersUsrId")})
+        @NamedQuery(name = "StatusEntity.findAll", query = "SELECT s FROM StatusEntity s"),
+        @NamedQuery(name = "StatusEntity.findByStsId", query = "SELECT s FROM StatusEntity s WHERE s.stsId = :stsId"),
+        @NamedQuery(name = "StatusEntity.findByStsName", query = "SELECT s FROM StatusEntity s WHERE s.stsName = :stsName"),
+        @NamedQuery(name = "StatusEntity.findByStsDesc", query = "SELECT s FROM StatusEntity s WHERE s.stsDesc = :stsDesc")})
 public class StatusEntity implements Serializable {
-
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected StatusEntityPK statusEntityPK;
+
+    @Id
     @Basic(optional = false)
+    @Column(name = "sts_id")
+    private Long stsId;
     @NotNull
     @Size(min = 1, max = 45)
+    @Basic(optional = false)
     @Column(name = "sts_name")
     private String stsName;
-    @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
+    @Basic(optional = false)
     @Column(name = "sts_desc")
     private String stsDesc;
-    @JoinColumn(name = "users_usr_id", referencedColumnName = "usr_id", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private UsersEntity usersEntity;
+    @OneToMany(mappedBy = "usrStsId")
+    private List<UsersEntity> usersEntityList;
 
     public StatusEntity() {
     }
 
-    public StatusEntity(StatusEntityPK statusEntityPK) {
-        this.statusEntityPK = statusEntityPK;
+    public StatusEntity(Long stsId) {
+        this.stsId = stsId;
     }
 
-    public StatusEntity(StatusEntityPK statusEntityPK, String stsName, String stsDesc) {
-        this.statusEntityPK = statusEntityPK;
+    public StatusEntity(Long stsId, String stsName, String stsDesc) {
+        this.stsId = stsId;
         this.stsName = stsName;
         this.stsDesc = stsDesc;
     }
 
-    public StatusEntity(long stsId, long usersUsrId) {
-        this.statusEntityPK = new StatusEntityPK(stsId, usersUsrId);
+    public Long getStsId() {
+        return stsId;
     }
 
-    public StatusEntityPK getStatusEntityPK() {
-        return statusEntityPK;
-    }
-
-    public void setStatusEntityPK(StatusEntityPK statusEntityPK) {
-        this.statusEntityPK = statusEntityPK;
+    public void setStsId(Long stsId) {
+        this.stsId = stsId;
     }
 
     public String getStsName() {
@@ -87,18 +83,18 @@ public class StatusEntity implements Serializable {
         this.stsDesc = stsDesc;
     }
 
-    public UsersEntity getUsersEntity() {
-        return usersEntity;
+    public List<UsersEntity> getUsersEntityList() {
+        return usersEntityList;
     }
 
-    public void setUsersEntity(UsersEntity usersEntity) {
-        this.usersEntity = usersEntity;
+    public void setUsersEntityList(List<UsersEntity> usersEntityList) {
+        this.usersEntityList = usersEntityList;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (statusEntityPK != null ? statusEntityPK.hashCode() : 0);
+        hash += (stsId != null ? stsId.hashCode() : 0);
         return hash;
     }
 
@@ -109,7 +105,7 @@ public class StatusEntity implements Serializable {
             return false;
         }
         StatusEntity other = (StatusEntity) object;
-        if ((this.statusEntityPK == null && other.statusEntityPK != null) || (this.statusEntityPK != null && !this.statusEntityPK.equals(other.statusEntityPK))) {
+        if ((this.stsId == null && other.stsId != null) || (this.stsId != null && !this.stsId.equals(other.stsId))) {
             return false;
         }
         return true;
@@ -117,7 +113,7 @@ public class StatusEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "com.tryton.small_world.auth.db.StatusEntity[ statusEntityPK=" + statusEntityPK + " ]";
+        return "com.tryton.small_world.auth.db.StatusEntity[ stsId=" + stsId + " ]";
     }
     
 }

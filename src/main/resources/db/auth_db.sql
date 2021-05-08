@@ -21,6 +21,18 @@ SET character_set_server = UTF8;
 USE `auth` ;
 
 -- -----------------------------------------------------
+-- Table `auth`.`status`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `auth`.`status` ;
+
+CREATE TABLE IF NOT EXISTS `auth`.`status` (
+                                               `sts_id` BIGINT(20) NOT NULL,
+                                               `sts_name` VARCHAR(45) NOT NULL,
+                                               `sts_desc` VARCHAR(100) NOT NULL,
+                                               PRIMARY KEY (`sts_id`))
+    ENGINE = InnoDB;
+
+-- -----------------------------------------------------
 -- Table `auth`.`users`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `auth`.`users` ;
@@ -31,12 +43,20 @@ CREATE TABLE IF NOT EXISTS `auth`.`users` (
                                               `usr_password` VARCHAR(200) NOT NULL,
                                               `usr_last_name` VARCHAR(200) NOT NULL,
                                               `usr_first_name` VARCHAR(200) NOT NULL,
-                                              `usr_date_inserted` VARCHAR(45) NOT NULL,
-                                              `usr_date_modified` TIMESTAMP NOT NULL,
-
-                                              PRIMARY KEY (`usr_id`))
+                                              `usr_date_inserted` VARCHAR(45) NULL,
+                                              `usr_date_modified` TIMESTAMP NULL,
+                                              `usr_sts_id` BIGINT(20) NULL,
+                                              PRIMARY KEY (`usr_id`),
+                                              CONSTRAINT `usr_sts_fk`
+                                                  FOREIGN KEY (`usr_sts_id`)
+                                                      REFERENCES `auth`.`status` (`sts_id`)
+                                                      ON DELETE NO ACTION
+                                                      ON UPDATE NO ACTION)
     ENGINE = InnoDB;
 
+CREATE INDEX `usr_sts_fk_idx` ON `auth`.`users` (`usr_sts_id` ASC) VISIBLE;
+
+CREATE UNIQUE INDEX `usr_email_UNIQUE` ON `auth`.`users` (`usr_email` ASC) VISIBLE;
 
 -- -----------------------------------------------------
 -- Table `auth`.`role`
@@ -50,26 +70,6 @@ CREATE TABLE IF NOT EXISTS `auth`.`role` (
                                              PRIMARY KEY (`rol_id`))
     ENGINE = InnoDB;
 
-
--- -----------------------------------------------------
--- Table `auth`.`status`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `auth`.`status` ;
-
-CREATE TABLE IF NOT EXISTS `auth`.`status` (
-                                               `sts_id` BIGINT(20) NOT NULL,
-                                               `sts_name` VARCHAR(45) NOT NULL,
-                                               `sts_desc` VARCHAR(100) NOT NULL,
-                                               `users_usr_id` BIGINT(20) NOT NULL,
-                                               PRIMARY KEY (`sts_id`, `users_usr_id`),
-                                               CONSTRAINT `fk_status_users`
-                                                   FOREIGN KEY (`users_usr_id`)
-                                                       REFERENCES `auth`.`users` (`usr_id`)
-                                                       ON DELETE NO ACTION
-                                                       ON UPDATE NO ACTION)
-    ENGINE = InnoDB;
-
-CREATE INDEX `fk_status_users_idx` ON `auth`.`status` (`users_usr_id` ASC) VISIBLE;
 
 
 -- -----------------------------------------------------

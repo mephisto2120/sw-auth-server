@@ -3,10 +3,6 @@ package com.tryton.small_world.auth.db;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-import javax.annotation.Generated;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,8 +11,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -24,6 +20,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -80,8 +79,9 @@ public class UsersEntity implements Serializable {
     private Date usrDateModified;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usersEntity", fetch = FetchType.EAGER)
     private List<UsersRolesEntity> usersRolesEntityList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usersEntity", fetch = FetchType.LAZY)
-    private List<StatusEntity> statusEntityList;
+    @JoinColumn(name = "usr_sts_id", referencedColumnName = "sts_id")
+    @ManyToOne
+    private StatusEntity usrStsId;
 
     public UsersEntity() {
     }
@@ -164,12 +164,12 @@ public class UsersEntity implements Serializable {
         this.usersRolesEntityList = usersRolesEntityList;
     }
 
-    public List<StatusEntity> getStatusEntityList() {
-        return statusEntityList;
+    public StatusEntity getUsrStsId() {
+        return usrStsId;
     }
 
-    public void setStatusEntityList(List<StatusEntity> statusEntityList) {
-        this.statusEntityList = statusEntityList;
+    public void setUsrStsId(StatusEntity usrStsId) {
+        this.usrStsId = usrStsId;
     }
 
     @Override
