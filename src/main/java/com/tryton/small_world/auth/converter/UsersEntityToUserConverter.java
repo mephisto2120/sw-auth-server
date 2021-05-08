@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
-public class UserEntityConverter {
-    private final RoleEntityConverter roleEntityConverter;
-    private final StatusEntityConverter statusEntityConverter;
+public class UsersEntityToUserConverter {
+    private final RoleEntityToRoleConverter roleEntityToRoleConverter;
+    private final StatusEntityToStatusConverter statusEntityToStatusConverter;
 
     public User toModel(UsersEntity entity) {
         if (entity == null) {
@@ -35,13 +35,13 @@ public class UserEntityConverter {
     private List<Role> toRoles(List<UsersRolesEntity> usersRolesEntities) {
         return usersRolesEntities.stream()
                 .map(UsersRolesEntity::getRoleEntity)
-                .map(roleEntityConverter::toModel)
+                .map(roleEntityToRoleConverter::toModel)
                 .collect(Collectors.toList());
     }
 
     private List<Status> toStatuses(List<StatusEntity> statusEntities) {
         return statusEntities.stream()
-                .map(statusEntityConverter::toModel)
+                .map(statusEntityToStatusConverter::toModel)
                 .collect(Collectors.toList());
     }
 }

@@ -5,7 +5,7 @@ import com.tryton.small_world.auth.model.Role;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RoleEntityConverter {
+public class RoleEntityToRoleConverter {
     public Role toModel(RoleEntity entity) {
         return Role.of(entity.getRolName());
     }

@@ -1,4 +1,4 @@
-package com.tryton.small_world.auth.controller.repository;
+package com.tryton.small_world.auth.repository;
 
 import com.tryton.small_world.auth.db.UsersEntity;
 import org.springframework.data.jpa.repository.Query;

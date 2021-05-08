@@ -5,7 +5,7 @@ import com.tryton.small_world.auth.model.Status;
 import org.springframework.stereotype.Component;
 
 @Component
-public class StatusEntityConverter {
+public class StatusEntityToStatusConverter {
     public Status toModel(StatusEntity entity) {
         return Status.of(entity.getStsName());
     }
