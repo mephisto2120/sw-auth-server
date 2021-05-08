@@ -1,26 +1,27 @@
 package com.tryton.small_world.auth.service;
 
+import com.tryton.small_world.auth.controller.repository.UserRepository;
+import com.tryton.small_world.auth.converter.UserEntityConverter;
+import com.tryton.small_world.auth.db.UsersEntity;
 import com.tryton.small_world.auth.model.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+
+@RequiredArgsConstructor
 @Service
 public class UserService {
+    private final UserRepository userRepository;
+    private final UserEntityConverter userEntityConverter;
+
     public User findByEmail(String email) {
-        if ("fake@gmail.com".equalsIgnoreCase(email)) {
-            return User.builder()
-                    .email(email)
-                    .build();
-        }
-        return null;
+        UsersEntity usersEntity = userRepository.findByUsrEmail(email);
+        return userEntityConverter.toModel(usersEntity);
     }
 
     public User findByEmailAndPassword(User user) {
-        if ("fake@gmail.com".equalsIgnoreCase(user.getEmail())) {
-            return User.builder()
-                    .email(user.getEmail())
-                    .build();
-        }
-        return null;
+        UsersEntity usersEntity = userRepository.findByUsrEmailAndUsrPassword(user.getEmail(), user.getPassword());
+        return userEntityConverter.toModel(usersEntity);
     }
 
     public void create(User newUser) {
