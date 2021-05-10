@@ -24,11 +24,11 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "role")
-@NamedQueries({
-    @NamedQuery(name = "RoleEntity.findAll", query = "SELECT r FROM RoleEntity r"),
-    @NamedQuery(name = "RoleEntity.findByRolId", query = "SELECT r FROM RoleEntity r WHERE r.rolId = :rolId"),
-    @NamedQuery(name = "RoleEntity.findByRolName", query = "SELECT r FROM RoleEntity r WHERE r.rolName = :rolName"),
-    @NamedQuery(name = "RoleEntity.findByRolDesc", query = "SELECT r FROM RoleEntity r WHERE r.rolDesc = :rolDesc")})
+//@NamedQueries({
+//    @NamedQuery(name = "RoleEntity.findAll", query = "SELECT r FROM RoleEntity r"),
+//    @NamedQuery(name = "RoleEntity.findByRolId", query = "SELECT r FROM RoleEntity r WHERE r.rolId = :rolId"),
+//    @NamedQuery(name = "RoleEntity.findByRolName", query = "SELECT r FROM RoleEntity r WHERE r.rolName = :rolName"),
+//    @NamedQuery(name = "RoleEntity.findByRolDesc", query = "SELECT r FROM RoleEntity r WHERE r.rolDesc = :rolDesc")})
 public class RoleEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

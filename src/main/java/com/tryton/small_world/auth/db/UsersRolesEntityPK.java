@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 
+
 @Builder
 @Embeddable
 public class UsersRolesEntityPK implements Serializable {

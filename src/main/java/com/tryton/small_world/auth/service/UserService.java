@@ -4,6 +4,7 @@ import com.tryton.small_world.auth.converter.RoleToRoleEntityConverter;
 import com.tryton.small_world.auth.converter.UserToUsersEntityConverter;
 import com.tryton.small_world.auth.db.RoleEntity;
 import com.tryton.small_world.auth.db.UsersRolesEntity;
+import com.tryton.small_world.auth.db.UsersRolesEntityPK;
 import com.tryton.small_world.auth.exception.DuplicateEntityException;
 import com.tryton.small_world.auth.model.Role;
 import com.tryton.small_world.auth.model.Status;
@@ -16,7 +17,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +29,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class UserService {
+
+    private static final ZoneId ZONE_ID = ZoneId.of("Europe/London");
+
     private final UserRepository userRepository;
     private final UsersEntityToUserConverter usersEntityToUserConverter;
     private final UserToUsersEntityConverter userToUsersEntityConverter;
@@ -53,9 +61,20 @@ public class UserService {
 
         UsersEntity savedUserEntity = userRepository.save(usersEntity);
 
+        RoleEntity roleEntity = roleToRoleEntityConverter.toEntity(Role.USER);
+
+        UsersRolesEntityPK usersRolesEntityPK = UsersRolesEntityPK.builder()
+                .urRolId(roleEntity.getRolId())
+                .urUsrId(savedUserEntity.getUsrId())
+                .build();
+
+        Date now = Date.from(Instant.now(Clock.system(ZONE_ID)));
         UsersRolesEntity usersRolesEntity = UsersRolesEntity.builder()
-                .roleEntity(roleToRoleEntityConverter.toEntity(Role.USER))
+                .usersRolesEntityPK(usersRolesEntityPK)
+                .roleEntity(roleEntity)
                 .usersEntity(savedUserEntity)
+                .urDateInserted(now.toString())
+                .urDateModified(now)
                 .build();
         usersRolesRepository.save(usersRolesEntity);
     }

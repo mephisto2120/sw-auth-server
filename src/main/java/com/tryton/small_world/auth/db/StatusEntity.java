@@ -21,11 +21,11 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "status")
-@NamedQueries({
-        @NamedQuery(name = "StatusEntity.findAll", query = "SELECT s FROM StatusEntity s"),
-        @NamedQuery(name = "StatusEntity.findByStsId", query = "SELECT s FROM StatusEntity s WHERE s.stsId = :stsId"),
-        @NamedQuery(name = "StatusEntity.findByStsName", query = "SELECT s FROM StatusEntity s WHERE s.stsName = :stsName"),
-        @NamedQuery(name = "StatusEntity.findByStsDesc", query = "SELECT s FROM StatusEntity s WHERE s.stsDesc = :stsDesc")})
+//@NamedQueries({
+//        @NamedQuery(name = "StatusEntity.findAll", query = "SELECT s FROM StatusEntity s"),
+//        @NamedQuery(name = "StatusEntity.findByStsId", query = "SELECT s FROM StatusEntity s WHERE s.stsId = :stsId"),
+//        @NamedQuery(name = "StatusEntity.findByStsName", query = "SELECT s FROM StatusEntity s WHERE s.stsName = :stsName"),
+//        @NamedQuery(name = "StatusEntity.findByStsDesc", query = "SELECT s FROM StatusEntity s WHERE s.stsDesc = :stsDesc")})
 public class StatusEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 

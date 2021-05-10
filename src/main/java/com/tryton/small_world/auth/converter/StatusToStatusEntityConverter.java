@@ -14,6 +14,6 @@ public class StatusToStatusEntityConverter {
     private final StatusRepository statusRepository;
 
     public StatusEntity toEntity(Status status) {
-        return statusRepository.findByStsName(status.name());
+        return statusRepository.findByStsName(status.getAbbreviation());
     }
 }
