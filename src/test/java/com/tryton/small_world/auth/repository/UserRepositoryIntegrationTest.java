@@ -14,6 +14,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -36,6 +37,8 @@ public class UserRepositoryIntegrationTest {
 
     @BeforeEach
     public void setUp() {
+        cleanUpByEmails();
+
         Date now = Date.from(Instant.now());
         UsersEntity user1 = UsersEntity.builder()
                 .usrEmail(SPASSKY_EMAIL)
@@ -67,6 +70,16 @@ public class UserRepositoryIntegrationTest {
         userIds.add(saved2.getUsrId());
     }
 
+    private void cleanUpByEmails() {
+        deleteByEmail(SPASSKY_EMAIL);
+        deleteByEmail(PETROSIAN_EMAIL);
+    }
+
+    private void deleteByEmail(String email) {
+        UsersEntity spasskyEntity = userRepository.findByUsrEmail(email);
+        Optional.ofNullable(spasskyEntity).ifPresent(userRepository::delete);
+    }
+
     @AfterEach
     void cleanUp() {
         userIds.forEach(userRepository::deleteById);
@@ -76,9 +89,6 @@ public class UserRepositoryIntegrationTest {
     public void testFetchData() {
         assertUser(SPASSKY_EMAIL, SPASSKY_PASSWORD);
         assertUser(PETROSIAN_EMAIL, PETROSIAN_PASSWORD);
-
-        Iterable<UsersEntity> users = userRepository.findAll();
-        assertThat(users).hasSize(2);
     }
 
     private void assertUser(String email, String password) {
