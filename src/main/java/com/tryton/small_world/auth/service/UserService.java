@@ -2,16 +2,16 @@ package com.tryton.small_world.auth.service;
 
 import com.tryton.small_world.auth.converter.RoleToRoleEntityConverter;
 import com.tryton.small_world.auth.converter.UserToUsersEntityConverter;
+import com.tryton.small_world.auth.converter.UsersEntityToUserConverter;
 import com.tryton.small_world.auth.db.RoleEntity;
+import com.tryton.small_world.auth.db.UsersEntity;
 import com.tryton.small_world.auth.db.UsersRolesEntity;
 import com.tryton.small_world.auth.db.UsersRolesEntityPK;
 import com.tryton.small_world.auth.exception.DuplicateEntityException;
 import com.tryton.small_world.auth.model.Role;
 import com.tryton.small_world.auth.model.Status;
-import com.tryton.small_world.auth.repository.UserRepository;
-import com.tryton.small_world.auth.converter.UsersEntityToUserConverter;
-import com.tryton.small_world.auth.db.UsersEntity;
 import com.tryton.small_world.auth.model.User;
+import com.tryton.small_world.auth.repository.UserRepository;
 import com.tryton.small_world.auth.repository.UsersRolesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,10 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -58,9 +55,7 @@ public class UserService {
         newUser.setStatus(Status.ACTIVE);
 
         UsersEntity usersEntity = userToUsersEntityConverter.toEntity(newUser);
-
         UsersEntity savedUserEntity = userRepository.save(usersEntity);
-
         RoleEntity roleEntity = roleToRoleEntityConverter.toEntity(Role.USER);
 
         UsersRolesEntityPK usersRolesEntityPK = UsersRolesEntityPK.builder()

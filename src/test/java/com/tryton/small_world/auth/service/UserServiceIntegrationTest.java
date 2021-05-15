@@ -26,6 +26,9 @@ import static org.assertj.core.api.ThrowableAssert.catchThrowable;
 class UserServiceIntegrationTest {
 
     private static final String EMAIL = "faker@gmail.com";
+    private static final String FIRST_NAME = "John";
+    private static final String LAST_NAME = "Faker";
+    private static final String PASSWORD = "topSecret";
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -62,14 +65,7 @@ class UserServiceIntegrationTest {
     @Test
     void shouldCreateActiveUser() {
         //given
-        String firstName = "John";
-        String lastName = "Faker";
-        User user = User.builder()
-                .email(EMAIL)
-                .password("topSecret")
-                .firstName(firstName)
-                .lastName(lastName)
-                .build();
+        User user = user();
 
         //when
         Throwable thrown = catchThrowable(() -> userService.create(user));
@@ -77,11 +73,60 @@ class UserServiceIntegrationTest {
         //then
         assertThat(thrown).isNull();
         UsersEntity usersEntity = userRepository.findByUsrEmail(EMAIL);
-        assertThat(usersEntity.getUsrFirstName()).isEqualTo(firstName);
-        assertThat(usersEntity.getUsrLastName()).isEqualTo(lastName);
+        assertThat(usersEntity.getUsrFirstName()).isEqualTo(FIRST_NAME);
+        assertThat(usersEntity.getUsrLastName()).isEqualTo(LAST_NAME);
 
         assertThatUserHasStatusActive(usersEntity);
         assertThatUserHasRoleUser(usersEntity);
+    }
+
+    @Test
+    void shouldFindUserWhileTryToSignUp() {
+        //given
+        User user = user();
+        userService.create(user);
+
+        //when
+        User foundUser = userService.findByEmail(EMAIL);
+
+        //then
+        assertUser(foundUser);
+    }
+
+    @Test
+    void shouldFindUserWhileTryToSignIn() {
+        //given
+        User user = user();
+        userService.create(user);
+
+        User searchedUser = User.builder()
+                .email(EMAIL)
+                .password(PASSWORD)
+                .build();
+
+        //when
+        User foundUser = userService.findByEmailAndPassword(searchedUser);
+
+        //then
+        assertUser(foundUser);
+    }
+
+    private static void assertUser(User foundUser) {
+        assertThat(foundUser.getFirstName()).isEqualTo(FIRST_NAME);
+        assertThat(foundUser.getLastName()).isEqualTo(LAST_NAME);
+        assertThat(foundUser.getEmail()).isEqualTo(EMAIL);
+        assertThat(foundUser.getPassword()).isEqualTo(PASSWORD);
+        assertThat(foundUser.getStatus()).isEqualTo(Status.ACTIVE);
+        assertThat(foundUser.getRoles().get(0)).isEqualTo(Role.USER);
+    }
+
+    private static User user() {
+        return User.builder()
+                .email(EMAIL)
+                .password(PASSWORD)
+                .firstName(FIRST_NAME)
+                .lastName(LAST_NAME)
+                .build();
     }
 
     private void assertThatUserHasStatusActive(UsersEntity usersEntity) {

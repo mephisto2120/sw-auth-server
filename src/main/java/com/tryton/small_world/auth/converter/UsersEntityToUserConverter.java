@@ -25,6 +25,8 @@ public class UsersEntityToUserConverter {
         return User.builder()
                 .email(entity.getUsrEmail())
                 .password(entity.getUsrPassword())
+                .firstName(entity.getUsrFirstName())
+                .lastName(entity.getUsrLastName())
                 .roles(toRoles(entity.getUsersRolesEntityList()))
                 .status(statusEntityToStatusConverter.toModel(entity.getUsrStsId()))
                 .build();
