@@ -1,12 +1,15 @@
 package com.tryton.small_world.auth.repository;
 
 import com.tryton.small_world.auth.db.UsersEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 
-public interface UserRepository extends CrudRepository<UsersEntity, Long> {
+@Repository
+public interface UserRepository extends JpaRepository<UsersEntity, Long> {
     @Query("SELECT u FROM UsersEntity u WHERE u.usrEmail = :usrEmail")
     UsersEntity findByUsrEmail(@Param("usrEmail") String usrEmail);
 
