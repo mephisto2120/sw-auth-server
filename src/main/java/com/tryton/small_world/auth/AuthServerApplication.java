@@ -9,11 +9,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
-//@EnableAutoConfiguration
-//@ComponentScan(basePackages={"com.tryton.small_world.auth"})
-//@EnableJpaRepositories("com.tryton.small_world.auth.repository")
-//@EnableTransactionManagement
-//@EntityScan(basePackages="com.tryton.small_world.auth.db")
 public class AuthServerApplication {
 
     public static void main(String[] args) {
