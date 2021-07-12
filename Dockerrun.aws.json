@@ -1,0 +1,13 @@
+{
+  "AWSEBDockerrunVersion": "1",
+  "Image": {
+    "Name": "mephisto2120/sw-auth-server",
+    "Update": "true"
+  },
+  "Ports": [
+    {
+      "ContainerPort": 11080,
+      "HostPort": 11080
+    }
+  ]
+}

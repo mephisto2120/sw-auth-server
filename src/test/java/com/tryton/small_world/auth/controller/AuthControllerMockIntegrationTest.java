@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = AuthServerApplication.class)
 @AutoConfigureMockMvc
-class AuthControllerIntegrationTest {
+class AuthControllerMockIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;

@@ -1,9 +1,11 @@
 package com.tryton.small_world.auth.controller;
 
+import com.tryton.small_world.auth.model.Token;
 import com.tryton.small_world.auth.model.User;
 import com.tryton.small_world.auth.service.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.impl.TextCodec;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -25,7 +27,7 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping(value = "/signup", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> signUp(@RequestBody User newUser) {
+    public ResponseEntity<Token> signUp(@RequestBody User newUser) {
         log.info("signUp: " + newUser.getEmail());
         User foundUser = userService.findByEmail(newUser.getEmail());
         if (foundUser != null) {
@@ -40,11 +42,11 @@ public class AuthController {
                 .build();
         String jwts = getJwts(user);
         log.info("signUp: " + newUser.getEmail() + " successfully");
-        return ResponseEntity.of(Optional.of(jwts));
+        return ResponseEntity.of(Optional.of(new Token(jwts)));
     }
 
     @PostMapping(value = "/signin")
-    public ResponseEntity<String> signIn(@RequestBody User user) {
+    public ResponseEntity<Token> signIn(@RequestBody User user) {
         log.info("signIn: " + user.getEmail());
         User foundUser = userService.findByEmailAndPassword(user);
         if (foundUser == null) {
@@ -56,17 +58,18 @@ public class AuthController {
 
         String jwts = getJwts(user);
         log.info("signIn: " + user.getEmail() + " successfully");
-        return ResponseEntity.of(Optional.of(jwts));
+        return ResponseEntity.of(Optional.of(new Token(jwts)));
     }
 
     private static String getJwts(User user) {
         long now = System.currentTimeMillis();
+        String secretKey = TextCodec.BASE64URL.encode("topSecret12#");
         String jwts = Jwts.builder()
                 .setSubject(user.getEmail())
                 .claim("roles", "user")
                 .setIssuedAt(new Date(now))
-                .setExpiration(new Date(now + 10000))
-                .signWith(SignatureAlgorithm.HS512, "secretkey")
+                .setExpiration(new Date(now + 600 * 1000))
+                .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
         return jwts;
     }
