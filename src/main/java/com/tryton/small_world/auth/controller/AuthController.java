@@ -1,5 +1,6 @@
 package com.tryton.small_world.auth.controller;
 
+import com.tryton.small_world.auth.model.Role;
 import com.tryton.small_world.auth.model.Token;
 import com.tryton.small_world.auth.model.User;
 import com.tryton.small_world.auth.service.UserService;
@@ -17,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Log4j2
 @CrossOrigin
@@ -56,7 +59,7 @@ public class AuthController {
                     .build();
         }
 
-        String jwts = getJwts(user);
+        String jwts = getJwts(foundUser);
         log.info("signIn: " + user.getEmail() + " successfully");
         return ResponseEntity.of(Optional.of(new Token(jwts)));
     }
@@ -64,13 +67,18 @@ public class AuthController {
     private static String getJwts(User user) {
         long now = System.currentTimeMillis();
         String secretKey = TextCodec.BASE64URL.encode("topSecret12#");
-        String jwts = Jwts.builder()
+        return Jwts.builder()
                 .setSubject(user.getEmail())
-                .claim("roles", "user")
+                .claim("roles", getRoles(user.getRoles()))
                 .setIssuedAt(new Date(now))
                 .setExpiration(new Date(now + 600 * 1000))
                 .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
-        return jwts;
+    }
+
+    private static String getRoles(List<Role> roles) {
+        return roles.stream()
+                .map(Role::getRoleName)
+                .collect(Collectors.joining(","));
     }
 }
