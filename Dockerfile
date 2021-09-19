@@ -12,5 +12,4 @@ RUN mvn -f /home/app/pom.xml clean package -Dmaven.test.skip=true
 FROM openjdk:8-jre-slim
 COPY --from=0 /home/app/target/sw-auth-server.jar /usr/local/lib/app.jar
 EXPOSE 11080
-#ENTRYPOINT ["java","-jar","/usr/local/lib/app.jar"]
 CMD java ${JAVA_OPTS} -Dspring.profiles.active=${ACTIVE_PROFILES} -jar /usr/local/lib/app.jar
