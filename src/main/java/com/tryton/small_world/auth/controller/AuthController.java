@@ -40,10 +40,8 @@ public class AuthController {
         }
 
         userService.create(newUser);
-        User user = User.builder()
-                .email(newUser.getEmail())
-                .build();
-        String jwts = getJwts(user);
+        User foundUser2 = userService.findByEmailAndPassword(newUser);
+        String jwts = getJwts(foundUser2);
         log.info("signUp: " + newUser.getEmail() + " successfully");
         return ResponseEntity.of(Optional.of(new Token(jwts)));
     }
