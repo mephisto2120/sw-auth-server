@@ -12,14 +12,14 @@ after_success:
   - echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_ID" --password-stdin
   # Take those images and push them to docker hub
   - docker push mephisto2120/sw-auth-server
-#deploy:
-#  provider: elasticbeanstalk
-#  region: eu-central-1
-#  app: sw-auth-server
-#  env: Swauthserver-env
-#  bucket_name: elasticbeanstalk-eu-central-1-700196549790
-#  bucket_path: sw-auth-docker-server
-#  on:
-#    branch: feature/aws
-#  access_key_id: $AWS_ACCESS_KEY
-#  secret_access_key: $AWS_SECRET_KEY
+deploy:
+  provider: elasticbeanstalk
+  region: eu-central-1
+  app: sw-auth-server
+  env: Swauthserver-env
+  bucket_name: elasticbeanstalk-eu-central-1-700196549790
+  bucket_path: sw-auth-docker-server
+  on:
+    branch: feature/aws
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
