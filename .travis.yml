@@ -7,7 +7,7 @@ script:
   -  mvn clean package
 
 after_success:
-  - docker build -t mephisto2120/sw-auth-server .
+  - docker build -f Dockerfile.prod -t mephisto2120/sw-auth-server .
   # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_ID" --password-stdin
   # Take those images and push them to docker hub
