@@ -17,7 +17,7 @@ deploy:
   region: eu-central-1
   app: sw-auth-server
   env: Swauthserver-env
-  bucket_name: elasticbeanstalk-eu-central-1-700196549790
+  bucket_name: elasticbeanstalk-eu-central-1-190781785962
   bucket_path: sw-auth-docker-server
   on:
     branch: feature/aws
